@@ -1,5 +1,6 @@
 package lt.ausra.company_exercise
 
+import android.util.Log
 import java.time.LocalDate
 import java.time.Period
 
@@ -8,6 +9,11 @@ class Employee(
     val lastName: String,
     val personalId: String,
 ) {
+
+    init {
+        getBirthDateFromPersonalId()
+        countAge()
+    }
 
     var age: Int = 0
         private set
@@ -33,12 +39,31 @@ class Employee(
         }
     }
 
-    private fun countAge(): Int {
+    private fun countAge() {
 
         val birthDay = LocalDate.parse(birthDate)
-        return Period.between(
+        age = Period.between(
             birthDay,
             LocalDate.now()
         ).years
+    }
+
+    fun display(TAG: String) {
+        Log.i(
+            TAG,
+            "Employee: %s %s, birth day: %s, age: %s, position: %s, experience: %s".format(
+                this.firstName,
+                this.lastName,
+                this.birthDate,
+                this.age,
+                this.position,
+                this.experience
+            )
+        )
+    }
+
+    override fun toString(): String {
+        return "Employee: $firstName $lastName \nBirth date: $birthDate \nAge: $age " +
+                " \nPosition: $position \nExperience: $experience years"
     }
 }
