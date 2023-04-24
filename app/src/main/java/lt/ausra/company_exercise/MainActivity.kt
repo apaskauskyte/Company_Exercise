@@ -3,7 +3,11 @@ package lt.ausra.company_exercise
 import android.nfc.Tag
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
+import android.view.View
 import android.widget.ArrayAdapter
+import android.widget.Button
+import android.widget.EditText
 import android.widget.ListView
 
 class MainActivity : AppCompatActivity() {
@@ -13,6 +17,10 @@ class MainActivity : AppCompatActivity() {
     lateinit var company: Company
     lateinit var textListView: ListView
     lateinit var adapter: ArrayAdapter<Employee>
+    lateinit var filteredListAdapter: ArrayAdapter<Employee>
+    lateinit var editText: EditText
+    lateinit var filterButton: Button
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -20,11 +28,10 @@ class MainActivity : AppCompatActivity() {
         company = Company()
         doAllEmployeesActions()
         setUpListView()
-
+        setButtonCLickListener()
     }
 
     fun doAllEmployeesActions() {
-
         val employee01 = Employee("Arianna", "Huffington", "45007150001")
         company.addEmployee(employee01, "Chief Executive Officer", 15)
         employee01.display(TAG)
@@ -56,5 +63,29 @@ class MainActivity : AppCompatActivity() {
             this, android.R.layout.simple_list_item_1, company.employeeList
         )
         textListView.adapter = adapter
+    }
+
+    private fun setButtonCLickListener() {
+        editText = findViewById(R.id.editText)
+        filterButton = findViewById(R.id.filterButton)
+
+        filterButton.setOnClickListener {
+
+            val yearsOfExperienceEntered = editText.text.toString().toInt()
+            val filteredEmployeeList: MutableList<Employee> = mutableListOf()
+
+            for (i in 0 until company.employeeList.size) {
+                if (company.employeeList[i].experience >= yearsOfExperienceEntered) {
+                    filteredEmployeeList.add(company.employeeList[i])
+                }
+            }
+
+            filteredListAdapter = ArrayAdapter(
+                this, android.R.layout.simple_list_item_1, filteredEmployeeList
+            )
+
+            textListView.adapter = filteredListAdapter
+            filteredListAdapter.notifyDataSetChanged()
+        }
     }
 }

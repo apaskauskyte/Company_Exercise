@@ -25,7 +25,6 @@ class Employee(
     lateinit var birthDate: String
 
     fun getBirthDateFromPersonalId() {
-
         val birthYearEnding = personalId.substring(1, 3)
         val monthOfBirth = personalId.substring(3, 5)
         val dayOfBirth = personalId.substring(5, 7)
@@ -40,7 +39,6 @@ class Employee(
     }
 
     private fun countAge() {
-
         val birthDay = LocalDate.parse(birthDate)
         age = Period.between(
             birthDay,
